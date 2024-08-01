@@ -4,9 +4,9 @@ function createUUIDTagOnElement(element) {
     field: "tags",
     parent: element,
     modelInitializer: function (elem) {
-      elem.name = "sUUID";
-      elem.kind = "string";
       elem.value = crypto.randomUUID()
+      elem.name = "UUID: "+elem.value;
+      elem.kind = "string";
       elem.hidden = true
     }
   }
@@ -30,7 +30,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
   var foundOnce = false
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
-    if ((tag.name === "sUUID")&&(tag.kind == "string")) {
+    if (tag.name.startsWith("UUID: ")&&(tag.kind == "string")) {
       if (foundOnce == true) {
         app.toast.error("Multiple sUUID[string] tags found. Can not proceed..");
         return null
@@ -42,7 +42,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
   var foundTag = null;
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
-    if ((tag.name === "sUUID")&&(tag.kind=="string")) {
+    if ((tag.name.startsWith("UUID: "))&&(tag.kind=="string")) {
       if (tag.value.length != 36 ) {
         app.toast.error("sUUID found but its value is invalid. Please manually delete it and recreate it");
         return null
@@ -65,7 +65,7 @@ function findAllTags(element, tagsList) {
   if (element.tags && element.tags.length > 0) {
     for (var i = 0; i < element.tags.length; i++) {
       var tag = element.tags[i];
-      if ((tag.name === "sUUID") && (tag.kind === "string")) {
+      if ((tag.name.startsWith("UUID: ")) && (tag.kind === "string")) {
         tagsList.push(tag);
       }
     }
