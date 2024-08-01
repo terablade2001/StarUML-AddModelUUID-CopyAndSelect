@@ -134,7 +134,7 @@ function copyModelId () {
     app.toast.error("Failed to copy selected UUID to clipboard!");
     return -1;
   }
-  app.toast.info("Id [ "+tag.value+" ] copied to clipboard.")
+  app.toast.info("UUID [ "+tag.value+" ] copied to clipboard.")
   return 0;
 }
 
@@ -142,7 +142,7 @@ function copyModelId () {
 function selectModelById () {
   var err = readFromClipboard();
   if (err != 0) {
-    app.toast.error("Failed to read selected id from clipboard!");
+    app.toast.error("Failed to read selected UUID from clipboard!");
     return -1;
   }
 
@@ -178,8 +178,24 @@ function selectModelById () {
 }
 
 
+
+
+function generateUUID() {
+  var uuid = crypto.randomUUID()
+  var err = writeToClipboard(uuid);
+  if (err != 0) {
+    app.toast.error("Failed to copy generated UUID to clipboard!");
+    return -1;
+  }
+  app.toast.info("UUID [ "+uuid+" ] copied to clipboard.")
+  return 0;
+}
+
+
+
 function init () {
   copiedTagUUIDValue = ""
+  app.commands.register('AddModelUUIdCopyAndSelect:generateUUID', generateUUID)
   app.commands.register('AddModelUUIdCopyAndSelect:copyModelId', copyModelId)
   app.commands.register('AddModelUUIdCopyAndSelect:selectModelById', selectModelById)
 }

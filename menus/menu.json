@@ -8,6 +8,11 @@
           "id": "tools.AddModelUUIdCopyAndSelect",
           "submenu": [
             {
+              "label": "Generate UUID in Clipboard",
+              "id": "tool.AddModelUUIdCopyAndSelect.generateUUID",
+              "command": "AddModelUUIdCopyAndSelect:generateUUID"
+            },
+            {
               "label": "Add+Copy Model's Tag UUID",
               "id": "tool.AddModelUUIdCopyAndSelect.copyModelId",
               "command": "AddModelUUIdCopyAndSelect:copyModelId"
