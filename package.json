@@ -1,0 +1,17 @@
+{
+  "name": "terablade2001.addmodeluuidcopyandselect",
+  "title": "Add Model UUID : Copy And Select",
+  "description": "StarUML : Add UUID as tag to elements. Copy and Select elements by their UUID",
+  "homepage": "https://github.com/terablade2001/StarUML-AddModelUUID-CopyAndSelect",
+  "version": "0.1.0",
+  "keywords": ["Model", "Element", "Id", "UUID", "unique", "identifier", "UML", "Copy", "Search", "Select", "Find"],
+  "author": {
+    "name": "Vasileios Pothos",
+    "email": "terablade2001@yahoo.gr",
+    "url": "https://github.com/terablade2001"
+  },
+  "license": "MIT",
+  "engines": {
+    "staruml": ">=5.1.0"
+  }
+}
