@@ -21,6 +21,11 @@
               "label": "Select Model by it's Tag UUID",
               "id": "tool.AddModelUUIdCopyAndSelect.selectModelById",
               "command": "AddModelUUIdCopyAndSelect:selectModelById"
+            },
+            {
+              "label": "Check for duplicated UUIDs",
+              "id": "tool.AddModelUUIdCopyAndSelect.checkForDuplicatedUUIDs",
+              "command": "AddModelUUIdCopyAndSelect:checkForDuplicatedUUIDs"
             }
           ]
         }

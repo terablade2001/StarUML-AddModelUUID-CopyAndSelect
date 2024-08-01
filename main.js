@@ -173,7 +173,7 @@ function selectModelById () {
   app.selections.deselectAll();
   app.selections.selectModel(modelById);
   app.modelExplorer.select(modelById, true);
-  app.toast.info("Model with Tag sUUID [ "+modelById._id+ "] selected.");
+  app.toast.info("Model with Tag sUUID [ "+copiedTagUUIDValue+ "] selected.");
   return 0;
 }
 
@@ -193,11 +193,54 @@ function generateUUID() {
 
 
 
+
+function checkForDuplicatedUUIDs() {
+  var rootElement = app.repository.select("@Project")[0];
+  var tagList = findAllTags(rootElement, []);
+
+  var tagMap = {};
+  for (var i = 0; i < tagList.length; i++) {
+    var tag = tagList[i];
+    if (tagMap[tag.value]) {
+      tagMap[tag.value].push(tag);
+    } else {
+      tagMap[tag.value] = [tag];
+    }
+  }
+
+  duplicatesStr = ""
+  for (var key in tagMap) {
+    if (tagMap[key].length > 1) {
+      duplicatesStr = " - Duplicated UUID["+key+"] detected at elements with parent _id's:\n"
+      for (var j = 0; j < tagMap[key].length; j++) {
+        var el = tagMap[key][j];
+        duplicatesStr += el._parent._id + "\n";
+      }
+    }
+  }
+
+  if (duplicatesStr=="") {
+    app.toast.info("No Duplicated UUIDs detected")
+    return 0;
+  }
+
+  console.log(duplicatesStr)
+  var err = writeToClipboard(duplicatesStr);
+  if (err != 0) {
+    app.toast.error("Failed to copy duplicated UUIDs results! See console logs to review them!");
+    return -1;
+  }
+  app.toast.info("Duplicated UUIDs detected and copied to clipboard!")
+  return 0;
+}
+
+
 function init () {
   copiedTagUUIDValue = ""
   app.commands.register('AddModelUUIdCopyAndSelect:generateUUID', generateUUID)
   app.commands.register('AddModelUUIdCopyAndSelect:copyModelId', copyModelId)
   app.commands.register('AddModelUUIdCopyAndSelect:selectModelById', selectModelById)
+  app.commands.register('AddModelUUIdCopyAndSelect:checkForDuplicatedUUIDs', checkForDuplicatedUUIDs)
 }
 
 exports.init = init;
