@@ -1,0 +1,25 @@
+{
+  "menu": [
+    {
+      "id": "tools",
+      "submenu": [
+        {
+          "label": "Add Model UUID : Copy And Select",
+          "id": "tools.AddModelUUIdCopyAndSelect",
+          "submenu": [
+            {
+              "label": "Add+Copy Model's Tag UUID",
+              "id": "tool.AddModelUUIdCopyAndSelect.copyModelId",
+              "command": "AddModelUUIdCopyAndSelect:copyModelId"
+            },
+            {
+              "label": "Select Model by it's Tag UUID",
+              "id": "tool.AddModelUUIdCopyAndSelect.selectModelById",
+              "command": "AddModelUUIdCopyAndSelect:selectModelById"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
