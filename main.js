@@ -15,6 +15,7 @@ function createUUIDTagOnElement(element) {
     app.toast.error("Failed to create Tag on selected parent");
     return null
   }
+  app.toast.warning("New UUID ["+tag.value+"] generated")
   return tag
 }
 
