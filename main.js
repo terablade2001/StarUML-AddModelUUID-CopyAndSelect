@@ -32,7 +32,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
     var tag = element.tags[i];
     if (tag.name.startsWith("UUID: ")&&(tag.kind == "string")) {
       if (foundOnce == true) {
-        app.toast.error("Multiple sUUID[string] tags found. Can not proceed..");
+        app.toast.error("Multiple UUID[string] tags found. Can not proceed..");
         return null
       }
       foundOnce = true;
@@ -44,7 +44,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
     var tag = element.tags[i];
     if ((tag.name.startsWith("UUID: "))&&(tag.kind=="string")) {
       if (tag.value.length != 36 ) {
-        app.toast.error("sUUID found but its value is invalid. Please manually delete it and recreate it");
+        app.toast.error("UUID found but its value is invalid. Please manually delete it and recreate it");
         return null
       } else {
         foundTag = tag
@@ -167,14 +167,14 @@ function selectModelById () {
 
   let modelById = app.repository.get(tag._parent._id)
   if (typeof(modelById) == "undefined") {
-    app.toast.error("Model with Tag sUUID [ "+copiedTagUUIDValue+" ] was not found!")
+    app.toast.error("Model with Tag UUID [ "+copiedTagUUIDValue+" ] was not found!")
     return -1;
   }
 
   app.selections.deselectAll();
   app.selections.selectModel(modelById);
   app.modelExplorer.select(modelById, true);
-  app.toast.info("Model with Tag sUUID [ "+copiedTagUUIDValue+ "] selected.");
+  app.toast.info("Model with Tag UUID [ "+copiedTagUUIDValue+ "] selected.");
   return 0;
 }
 
