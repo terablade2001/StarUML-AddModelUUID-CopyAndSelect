@@ -221,13 +221,11 @@ function generateUUID() {
 
 
 
-function checkForMultipleUUIDs(tagList) {
-  reportStr = ""
-  for (var i = 0; i < tagList.length; i++) {
-    var tag = tagList[i]
-    var resultStr = checkForMultipleUUIDTagsInElement(tag._parent)
-    if (resultStr != "") {
-      reportStr += resultStr
+function findMultipleUUIDs(element, reportStr) {
+  reportStr += checkForMultipleUUIDTagsInElement(element)
+  if (element.ownedElements && element.ownedElements.length > 0) {
+    for (var i = 0; i < element.ownedElements.length; i++) {
+      reportStr = findMultipleUUIDs(element.ownedElements[i], reportStr)
     }
   }
   return reportStr
@@ -274,7 +272,7 @@ function checkForDuplicatedUUIDs() {
   }
 
   // Check for multiple UUIDs under a single element too.
-  multipleUUIDsPerElementStr = checkForMultipleUUIDs(tagList)
+  multipleUUIDsPerElementStr = findMultipleUUIDs(rootElement, "")
   if (multipleUUIDsPerElementStr != "") {
     console.log(multipleUUIDsPerElementStr)
     var err = writeToClipboard(multipleUUIDsPerElementStr)
