@@ -24,6 +24,10 @@ function createUUIDTagOnElement(element) {
 
 function checkForMultipleUUIDTagsInElement(element) {
   var retString = ""
+  if ((!element.tags) || (element.tags.length <= 0)) {
+    return retString
+  }
+
   var UUIDTagsList = []
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
