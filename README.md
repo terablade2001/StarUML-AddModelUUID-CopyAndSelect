@@ -1,3 +1,9 @@
+> [!CAUTION]
+>
+> **Version 1.x.x is not compatible with previous versions 0.x.x**
+
+
+
 # About
 
 This is an extension for [StarUML.io](https://staruml.io/) S/W which aids the users to generate UUIDs for each selected element of their models in order to make references these elements, at documentation and/or the source code.
