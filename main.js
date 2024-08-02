@@ -4,8 +4,8 @@ function createUUIDTagOnElement(element) {
     field: "tags",
     parent: element,
     modelInitializer: function (elem) {
-      elem.value = crypto.randomUUID()
-      elem.name = "UUID: "+elem.value;
+      elem.value = ""
+      elem.name = "UUID: "+crypto.randomUUID();
       elem.kind = "string";
       elem.hidden = true
     }
@@ -43,7 +43,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
     if ((tag.name.startsWith("UUID: "))&&(tag.kind=="string")) {
-      if (tag.value.length != 36 ) {
+      if (tag.name.length != 42 ) {
         app.toast.error("UUID found but its value is invalid. Please manually delete it and recreate it");
         return null
       } else {
@@ -66,7 +66,7 @@ function findAllTags(element, tagsList) {
     for (var i = 0; i < element.tags.length; i++) {
       var tag = element.tags[i];
       if ((tag.name.startsWith("UUID: ")) && (tag.kind === "string")) {
-        tagsList.push(tag);
+        if (tag.name.length == 42 ) { tagsList.push(tag); }
       }
     }
   }
@@ -154,7 +154,8 @@ function selectModelById () {
   var tag = null;
   for (var i = 0; i < tagsList.length; i++) {
     var t = tagsList[i];
-    if (t.value === copiedTagUUIDValue) {
+    var uuid = t.substring(6);
+    if (uuid === copiedTagUUIDValue) {
       tag = t
       break
     }
@@ -202,10 +203,11 @@ function checkForDuplicatedUUIDs() {
   var tagMap = {};
   for (var i = 0; i < tagList.length; i++) {
     var tag = tagList[i];
-    if (tagMap[tag.value]) {
-      tagMap[tag.value].push(tag);
+    var uuid = t.substring(6);
+    if (tagMap[uuid]) {
+      tagMap[uuid].push(tag);
     } else {
-      tagMap[tag.value] = [tag];
+      tagMap[uuid] = [tag];
     }
   }
 
