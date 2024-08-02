@@ -23,7 +23,7 @@
               "command": "AddModelUUIdCopyAndSelect:selectModelById"
             },
             {
-              "label": "Check for duplicated UUIDs",
+              "label": "Check for errors on UUID Tags",
               "id": "tool.AddModelUUIdCopyAndSelect.checkForDuplicatedUUIDs",
               "command": "AddModelUUIdCopyAndSelect:checkForDuplicatedUUIDs"
             }
