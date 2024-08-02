@@ -217,6 +217,19 @@ function generateUUID() {
 
 
 
+function checkForMultipleUUIDs(tagList) {
+  reportStr = ""
+  for (var i = 0; i < tagList.length; i++) {
+    var tag = tagList[i]
+    var resultStr = checkForMultipleUUIDTagsInElement(tag.parent)
+    if (resultStr != "") {
+      reportStr += resultStr
+    }
+  }
+  return reportStr;
+}
+
+
 function checkForDuplicatedUUIDs() {
   var rootElement = app.repository.select("@Project")[0];
   var tagList = findAllTags(rootElement, []);
@@ -243,18 +256,32 @@ function checkForDuplicatedUUIDs() {
     }
   }
 
-  if (duplicatesStr=="") {
-    app.toast.info("No Duplicated UUIDs detected")
-    return 0;
+  if (duplicatesStr!="") {
+    console.log(duplicatesStr)
+    var err = writeToClipboard(duplicatesStr);
+    if (err != 0) {
+      app.toast.error("Failed to copy duplicated UUIDs results! See console logs to review them!");
+      return -1;
+    }
+    app.toast.info("Duplicated UUIDs detected and copied to clipboard!")
+  } else {
+    app.toast.info("1. No Duplicated UUIDs detected")
   }
 
-  console.log(duplicatesStr)
-  var err = writeToClipboard(duplicatesStr);
-  if (err != 0) {
-    app.toast.error("Failed to copy duplicated UUIDs results! See console logs to review them!");
-    return -1;
+  // Check for multiple UUIDs under a single element too.
+  multipleUUIDsPerElementStr = checkForMultipleUUIDs(tagList)
+  if (multipleUUIDsPerElementStr != "") {
+    console.log(multipleUUIDsPerElementStr)
+    var err = writeToClipboard(multipleUUIDsPerElementStr);
+    if (err != 0) {
+      app.toast.error("Failed to copy multiple UUIDs tags per parent results! See console logs to review them!");
+      return -1;
+    }
+    app.toast.info("Multiple UUIDs tags under the same parent element detected and copied to clipboard!")
+  } else {
+    app.toast.info("2. No multiple UUIDs tags per parent element detected")
   }
-  app.toast.info("Duplicated UUIDs detected and copied to clipboard!")
+
   return 0;
 }
 
