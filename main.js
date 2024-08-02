@@ -266,6 +266,7 @@ function checkForDuplicatedUUIDs() {
       return -1
     }
     app.toast.info("Duplicated UUIDs detected and copied to clipboard!")
+    app.toast.error("Check for duplicated UUIDs (1/2) failed!")
     return 0
   } else {
     app.toast.info("1. No Duplicated UUIDs detected")
@@ -281,10 +282,13 @@ function checkForDuplicatedUUIDs() {
       return -1
     }
     app.toast.info("Multiple UUIDs tags under the same parent element detected and copied to clipboard!")
+    app.toast.error("Check for Multiple UUIDs tags under same parent (2/2) failed!")
     return 0
   } else {
     app.toast.info("2. No multiple UUIDs tags per parent element detected")
   }
+
+  app.toast.info("All checks (2/2) passed")
 
   return 0
 }
