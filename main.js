@@ -35,7 +35,7 @@ function checkForMultipleUUIDTagsInElement(element) {
     }
   }
   if (UUIDTagsList.length > 1) {
-    retString = " - Multiple UUID Tags found at element with _id [ "+element._id+" ]\n"
+    retString = " - Multiple UUID Tags found at element ["+element.name+"] with _id [ "+element._id+" ]\n"
     for (var i=0; i < UUIDTagsList.length; i++) {
       var tag = UUIDTagsList[i]
       retString += tag.name + "\n"
@@ -238,7 +238,7 @@ function checkForDuplicatedUUIDs() {
       duplicatesStr = " - Duplicated UUID["+key+"] detected at elements with parent _id's:\n"
       for (var j = 0; j < tagMap[key].length; j++) {
         var el = tagMap[key][j];
-        duplicatesStr += el._parent._id + "\n";
+        duplicatesStr += "name: ["+el._parent.name+"], _id: [ "+el._parent._id+" ]\n";
       }
     }
   }
