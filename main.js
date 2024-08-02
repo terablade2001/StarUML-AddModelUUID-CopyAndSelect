@@ -1,12 +1,13 @@
 function createUUIDTagOnElement(element) {
+  var uuid = crypto.randomUUID()
   var options = {
     id: "Tag",
     field: "tags",
     parent: element,
     modelInitializer: function (elem) {
-      elem.name = "sUUID";
-      elem.kind = "string";
-      elem.value = crypto.randomUUID()
+      elem.value = ""
+      elem.name = "UUID: "+uuid
+      elem.kind = "string"
       elem.hidden = true
     }
   }
@@ -15,7 +16,7 @@ function createUUIDTagOnElement(element) {
     app.toast.error("Failed to create Tag on selected parent");
     return null
   }
-  app.toast.warning("New UUID ["+tag.value+"] generated")
+  app.toast.warning("New UUID ["+uuid+"] generated")
   return tag
 }
 
@@ -30,9 +31,9 @@ function findOrCreateUUIDTagOnElement(element, tag) {
   var foundOnce = false
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
-    if ((tag.name === "sUUID")&&(tag.kind == "string")) {
+    if (tag.name.startsWith("UUID: ")&&(tag.kind == "string")) {
       if (foundOnce == true) {
-        app.toast.error("Multiple sUUID[string] tags found. Can not proceed..");
+        app.toast.error("Multiple UUID[string] tags found. Can not proceed..");
         return null
       }
       foundOnce = true;
@@ -42,9 +43,9 @@ function findOrCreateUUIDTagOnElement(element, tag) {
   var foundTag = null;
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i];
-    if ((tag.name === "sUUID")&&(tag.kind=="string")) {
-      if (tag.value.length != 36 ) {
-        app.toast.error("sUUID found but its value is invalid. Please manually delete it and recreate it");
+    if ((tag.name.startsWith("UUID: "))&&(tag.kind=="string")) {
+      if (tag.name.length != 42 ) {
+        app.toast.error("UUID found but its value is invalid. Please manually delete it and recreate it");
         return null
       } else {
         foundTag = tag
@@ -65,8 +66,8 @@ function findAllTags(element, tagsList) {
   if (element.tags && element.tags.length > 0) {
     for (var i = 0; i < element.tags.length; i++) {
       var tag = element.tags[i];
-      if ((tag.name === "sUUID") && (tag.kind === "string")) {
-        tagsList.push(tag);
+      if ((tag.name.startsWith("UUID: ")) && (tag.kind === "string")) {
+        if (tag.name.length == 42 ) { tagsList.push(tag); }
       }
     }
   }
@@ -130,12 +131,13 @@ function copyModelId () {
   tag = findOrCreateUUIDTagOnElement(selected)
   if (tag == null) { return -1 }
 
-  var err = writeToClipboard(tag.value);
+  var uuid = tag.name.substring(6);
+  var err = writeToClipboard(uuid);
   if (err != 0) {
     app.toast.error("Failed to copy selected UUID to clipboard!");
     return -1;
   }
-  app.toast.info("UUID [ "+tag.value+" ] copied to clipboard.")
+  app.toast.info("UUID [ "+uuid+" ] copied to clipboard.")
   return 0;
 }
 
@@ -154,7 +156,8 @@ function selectModelById () {
   var tag = null;
   for (var i = 0; i < tagsList.length; i++) {
     var t = tagsList[i];
-    if (t.value === copiedTagUUIDValue) {
+    var uuid = t.name.substring(6);
+    if (uuid === copiedTagUUIDValue) {
       tag = t
       break
     }
@@ -167,14 +170,14 @@ function selectModelById () {
 
   let modelById = app.repository.get(tag._parent._id)
   if (typeof(modelById) == "undefined") {
-    app.toast.error("Model with Tag sUUID [ "+copiedTagUUIDValue+" ] was not found!")
+    app.toast.error("Model with Tag UUID [ "+copiedTagUUIDValue+" ] was not found!")
     return -1;
   }
 
   app.selections.deselectAll();
   app.selections.selectModel(modelById);
   app.modelExplorer.select(modelById, true);
-  app.toast.info("Model with Tag sUUID [ "+copiedTagUUIDValue+ "] selected.");
+  app.toast.info("Model with Tag UUID [ "+copiedTagUUIDValue+ "] selected.");
   return 0;
 }
 
@@ -202,10 +205,11 @@ function checkForDuplicatedUUIDs() {
   var tagMap = {};
   for (var i = 0; i < tagList.length; i++) {
     var tag = tagList[i];
-    if (tagMap[tag.value]) {
-      tagMap[tag.value].push(tag);
+    var uuid = tag.name.substring(6);
+    if (tagMap[uuid]) {
+      tagMap[uuid].push(tag);
     } else {
-      tagMap[tag.value] = [tag];
+      tagMap[uuid] = [tag];
     }
   }
 
