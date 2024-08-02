@@ -22,22 +22,41 @@ function createUUIDTagOnElement(element) {
 
 
 
+function checkForMultipleUUIDTagsInElement(element) {
+  var retString = ""
+  var UUIDTagsList = []
+  for (var i = 0; i < element.tags.length; i++) {
+    var tag = element.tags[i];
+    if (tag.name.startsWith("UUID: ")&&(tag.kind == "string")) {
+      if (tag.name.length == 42 ) {
+        uuid = tag.name.substring(6)
+        UUIDTagsList.push(tag)
+      }
+    }
+  }
+  if (UUIDTagsList.length > 1) {
+    retString = " - Multiple UUID Tags found at element with _id [ "+element._id+" ]\n"
+    for (var i=0; i < UUIDTagsList.length; i++) {
+      var tag = UUIDTagsList[i]
+      retString += tag.name + "\n"
+    }
+  }
+  return retString
+}
+
+
+
 function findOrCreateUUIDTagOnElement(element, tag) {
   if ((!element.tags) || (element.tags.length <= 0)) {
     tag = createUUIDTagOnElement(element)
     return tag
   }
 
-  var foundOnce = false
-  for (var i = 0; i < element.tags.length; i++) {
-    var tag = element.tags[i];
-    if (tag.name.startsWith("UUID: ")&&(tag.kind == "string")) {
-      if (foundOnce == true) {
-        app.toast.error("Multiple UUID[string] tags found. Can not proceed..");
-        return null
-      }
-      foundOnce = true;
-    }
+  retString = checkForMultipleUUIDTagsInElement(element)
+  if (retString != "") {
+    console.log(retString)
+    app.toast.error("Multiple UUID[string] tags found. See console.log for more info. Can not proceed..");
+    return null
   }
 
   var foundTag = null;
