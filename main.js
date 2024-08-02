@@ -225,7 +225,7 @@ function checkForMultipleUUIDs(tagList) {
   reportStr = ""
   for (var i = 0; i < tagList.length; i++) {
     var tag = tagList[i]
-    var resultStr = checkForMultipleUUIDTagsInElement(tag.parent)
+    var resultStr = checkForMultipleUUIDTagsInElement(tag._parent)
     if (resultStr != "") {
       reportStr += resultStr
     }
@@ -268,6 +268,7 @@ function checkForDuplicatedUUIDs() {
       return -1;
     }
     app.toast.info("Duplicated UUIDs detected and copied to clipboard!")
+    return 0;
   } else {
     app.toast.info("1. No Duplicated UUIDs detected")
   }
@@ -282,6 +283,7 @@ function checkForDuplicatedUUIDs() {
       return -1;
     }
     app.toast.info("Multiple UUIDs tags under the same parent element detected and copied to clipboard!")
+    return 0;
   } else {
     app.toast.info("2. No multiple UUIDs tags per parent element detected")
   }
