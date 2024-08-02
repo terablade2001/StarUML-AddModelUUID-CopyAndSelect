@@ -1,12 +1,13 @@
 function createUUIDTagOnElement(element) {
+  var uuid = crypto.randomUUID()
   var options = {
     id: "Tag",
     field: "tags",
     parent: element,
     modelInitializer: function (elem) {
       elem.value = ""
-      elem.name = "UUID: "+crypto.randomUUID();
-      elem.kind = "string";
+      elem.name = "UUID: "+uuid
+      elem.kind = "string"
       elem.hidden = true
     }
   }
@@ -15,7 +16,7 @@ function createUUIDTagOnElement(element) {
     app.toast.error("Failed to create Tag on selected parent");
     return null
   }
-  app.toast.warning("New UUID ["+tag.value+"] generated")
+  app.toast.warning("New UUID ["+uuid+"] generated")
   return tag
 }
 
@@ -130,12 +131,13 @@ function copyModelId () {
   tag = findOrCreateUUIDTagOnElement(selected)
   if (tag == null) { return -1 }
 
-  var err = writeToClipboard(tag.value);
+  var uuid = tag.name.substring(6);
+  var err = writeToClipboard(uuid);
   if (err != 0) {
     app.toast.error("Failed to copy selected UUID to clipboard!");
     return -1;
   }
-  app.toast.info("UUID [ "+tag.value+" ] copied to clipboard.")
+  app.toast.info("UUID [ "+uuid+" ] copied to clipboard.")
   return 0;
 }
 
@@ -154,7 +156,7 @@ function selectModelById () {
   var tag = null;
   for (var i = 0; i < tagsList.length; i++) {
     var t = tagsList[i];
-    var uuid = t.substring(6);
+    var uuid = t.name.substring(6);
     if (uuid === copiedTagUUIDValue) {
       tag = t
       break
@@ -203,7 +205,7 @@ function checkForDuplicatedUUIDs() {
   var tagMap = {};
   for (var i = 0; i < tagList.length; i++) {
     var tag = tagList[i];
-    var uuid = t.substring(6);
+    var uuid = tag.name.substring(6);
     if (tagMap[uuid]) {
       tagMap[uuid].push(tag);
     } else {
