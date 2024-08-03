@@ -99,6 +99,26 @@ function findAllTags(element, tagsList) {
       tagsList = findAllTags(element.ownedElements[i], tagsList)
     }
   }
+  if (element.operations && element.operations.length > 0) {
+    for (var i = 0; i < element.operations.length; i++) {
+      tagsList = findAllTags(element.operations[i], tagsList)
+    }
+  }
+  if (element.templateParameters && element.templateParameters.length > 0) {
+    for (var i = 0; i < element.templateParameters.length; i++) {
+      tagsList = findAllTags(element.templateParameters[i], tagsList)
+    }
+  }
+  if (element.receptions && element.receptions.length > 0) {
+    for (var i = 0; i < element.receptions.length; i++) {
+      tagsList = findAllTags(element.receptions[i], tagsList)
+    }
+  }
+  if (element.attributes && element.attributes.length > 0) {
+    for (var i = 0; i < element.attributes.length; i++) {
+      tagsList = findAllTags(element.attributes[i], tagsList)
+    }
+  }
   return tagsList
 }
 
