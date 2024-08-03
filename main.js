@@ -51,11 +51,13 @@ function checkForMultipleUUIDTagsInElement(element) {
 
 
 function findOrCreateUUIDTagOnElement(element, tag) {
+  // If no tag exist then create one in the selected element
   if ((!element.tags) || (element.tags.length <= 0)) {
     tag = createUUIDTagOnElement(element)
     return tag
   }
 
+  // Check for multiple UUID tags in the Selected element
   retString = checkForMultipleUUIDTagsInElement(element)
   if (retString != "") {
     console.log(retString)
@@ -63,6 +65,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
     return null
   }
 
+  // Get the UUID from the selected element, being sure it has 42 letters
   var foundTag = null
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i]
@@ -76,10 +79,14 @@ function findOrCreateUUIDTagOnElement(element, tag) {
       }
     }
   }
+
+  // If there is no UUID existing tag, then generate a new one for the selected
+  // element and return this one.
   if (foundTag == null) {
     tag = createUUIDTagOnElement(element)
     return tag
   }
+
   return null
 }
 
