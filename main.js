@@ -51,11 +51,13 @@ function checkForMultipleUUIDTagsInElement(element) {
 
 
 function findOrCreateUUIDTagOnElement(element, tag) {
+  // If no tag exist then create one in the selected element
   if ((!element.tags) || (element.tags.length <= 0)) {
     tag = createUUIDTagOnElement(element)
     return tag
   }
 
+  // Check for multiple UUID tags in the Selected element
   retString = checkForMultipleUUIDTagsInElement(element)
   if (retString != "") {
     console.log(retString)
@@ -63,6 +65,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
     return null
   }
 
+  // Get the UUID from the selected element, being sure it has 42 letters
   var foundTag = null
   for (var i = 0; i < element.tags.length; i++) {
     var tag = element.tags[i]
@@ -76,29 +79,42 @@ function findOrCreateUUIDTagOnElement(element, tag) {
       }
     }
   }
+
+  // If there is no UUID existing tag, then generate a new one for the selected
+  // element and return this one.
   if (foundTag == null) {
     tag = createUUIDTagOnElement(element)
     return tag
   }
+
   return null
 }
 
 
 
-function findAllTags(element, tagsList) {
-  if (element.tags && element.tags.length > 0) {
-    for (var i = 0; i < element.tags.length; i++) {
-      var tag = element.tags[i]
-      if ((tag.name.startsWith("UUID: ")) && (tag.kind === "string")) {
-        if (tag.name.length == 42 ) { tagsList.push(tag) }
+function findAllUUIDTags(element, tagsList) {
+  tags = app.repository.select("@Tag[kind=string]")
+
+  if ((tags) && (tags.length > 0)) {
+    for (var i = 0; i < tags.length; i++) {
+      var selectedTag = tags[i]
+      if (selectedTag.name.length == 42 ) {
+        if (selectedTag.name.startsWith("UUID: ")) {
+          // Accept the tag only if it has at its parent hierarchy the input 'element'
+          var parent = selectedTag._parent
+          for (var safeCount = 0; safeCount < 10000; safeCount++) {
+            if (parent === element) {
+              tagsList.push(selectedTag)
+              break
+            }
+            parent = parent._parent
+            if (!parent) { break }
+          }
+        }
       }
     }
   }
-  if (element.ownedElements && element.ownedElements.length > 0) {
-    for (var i = 0; i < element.ownedElements.length; i++) {
-      tagsList = findAllTags(element.ownedElements[i], tagsList)
-    }
-  }
+
   return tagsList
 }
 
@@ -174,7 +190,7 @@ function selectModelById () {
 
 
   var rootElement = app.repository.select("@Project")[0]
-  var tagsList = findAllTags(rootElement, [])
+  var tagsList = findAllUUIDTags(rootElement, [])
 
   var tag = null
   for (var i = 0; i < tagsList.length; i++) {
@@ -234,7 +250,7 @@ function findMultipleUUIDs(element, reportStr) {
 
 function checkForDuplicatedUUIDs() {
   var rootElement = app.repository.select("@Project")[0]
-  var tagList = findAllTags(rootElement, [])
+  var tagList = findAllUUIDTags(rootElement, [])
 
   var tagMap = {}
   for (var i = 0; i < tagList.length; i++) {
