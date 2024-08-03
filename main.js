@@ -92,7 +92,7 @@ function findOrCreateUUIDTagOnElement(element, tag) {
 
 
 
-function findAllTags(element, tagsList) {
+function findAllUUIDTags(element, tagsList) {
   tags = app.repository.select("@Tag[kind=string]")
 
   if ((tags) && (tags.length > 0)) {
@@ -190,7 +190,7 @@ function selectModelById () {
 
 
   var rootElement = app.repository.select("@Project")[0]
-  var tagsList = findAllTags(rootElement, [])
+  var tagsList = findAllUUIDTags(rootElement, [])
 
   var tag = null
   for (var i = 0; i < tagsList.length; i++) {
@@ -250,7 +250,7 @@ function findMultipleUUIDs(element, reportStr) {
 
 function checkForDuplicatedUUIDs() {
   var rootElement = app.repository.select("@Project")[0]
-  var tagList = findAllTags(rootElement, [])
+  var tagList = findAllUUIDTags(rootElement, [])
 
   var tagMap = {}
   for (var i = 0; i < tagList.length; i++) {
